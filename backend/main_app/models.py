@@ -1,8 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-from django.db import models
-from django.contrib.auth.models import User
 
 class Articles(models.Model):
     title = models.CharField(max_length=200)
@@ -22,6 +20,7 @@ class Comments(models.Model):
     def __str__(self):
         return '%s - %s' % (self.articles.title, self.author)
 
+
 class FavoriteArticle(models.Model):
     article = models.ForeignKey(Articles, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -31,5 +30,3 @@ class FavoriteArticle(models.Model):
 
     def __str__(self):
         return f"{self.user} - {self.articles.title}"
-
-
