@@ -1,11 +1,15 @@
 from rest_framework import serializers
 from .models import Articles, Comments, FavoriteArticle
+from backend.users.serializers import UserSerializer
 
 
 class ArticleSerializer(serializers.ModelSerializer):
+    author = serializers.PrimaryKeyRelatedField(read_only=True)
+
     class Meta:
         model = Articles
-        fields = '__all__'
+        fields = ['id', 'title', 'content', 'create_at', 'author', 'comments']
+        depth = 1
 
     def create(self, validated_data):
         return Articles.objects.create(**validated_data)
@@ -18,9 +22,12 @@ class ArticleSerializer(serializers.ModelSerializer):
 
 
 class CommentSerializer(serializers.ModelSerializer):
+    article = ArticleSerializer()
+    author = UserSerializer()
+
     class Meta:
         model = Comments
-        fields = '__all__'
+        fields = ['id', 'content', 'created_at', 'article', 'author']
 
     def create(self, validated_data):
         return Comments.objects.create(**validated_data)
