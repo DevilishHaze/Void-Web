@@ -18,7 +18,7 @@ class Comments(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return '%s - %s' % (self.articles.title, self.author)
+        return "Комментарий: {}".format(self.id)
 
 
 class FavoriteArticle(models.Model):

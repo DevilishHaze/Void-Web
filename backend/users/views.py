@@ -1,17 +1,13 @@
-from rest_framework import generics, permissions
-from .models import CustomUser
-from backend.main_app.models import Comments
-from .serializers import CustomUserSerializer
-from backend.main_app.serializers import CommentSerializer
+from rest_framework import viewsets, permissions
+from django.contrib.auth.models import User
+from .serializers import UserSerializer
 
 
-class CustomUserDetailView(generics.RetrieveAPIView):
-    queryset = CustomUser.objects.all()
-    serializer_class = CustomUserSerializer
-    permission_classes = [permissions.IsAuthenticated]
 
-    def get_object(self):
-        return self.request.user
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [permissions.AllowAny]
 
 
 
