@@ -10,6 +10,7 @@ class ArticleSerializer(serializers.ModelSerializer):
         model = Articles
         fields = ['id', 'title', 'content', 'create_at', 'author', 'comments']
         depth = 1
+        ref_name ='ArticleSerializer'
 
     def create(self, validated_data):
         return Articles.objects.create(**validated_data)
@@ -28,7 +29,7 @@ class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comments
         fields = ['id', 'content', 'created_at', 'article', 'author']
-
+        ref_name = 'CommentSerializer'
     def create(self, validated_data):
         return Comments.objects.create(**validated_data)
 
