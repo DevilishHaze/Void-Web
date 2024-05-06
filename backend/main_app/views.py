@@ -1,4 +1,5 @@
-from rest_framework import viewsets, permissions
+from rest_framework import viewsets, permissions, status
+from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.exceptions import PermissionDenied
 from .models import Articles, Comments, FavoriteArticle
@@ -57,56 +58,15 @@ class FavoriteArticleViewSet(viewsets.ModelViewSet):
         if instance.user == self.request.user:
             instance.delete()
 
-# class ArticleListCreateRetrieveUpdateDestroyView(generics.ListCreateAPIView, generics.RetrieveUpdateDestroyAPIView):
-#     queryset = Articles.objects.all()
-#     serializer_class = ArticleSerializer  # просмотр,удаление,изменение,создание списка статей
-#
-#     def get_permissions(self):
-#         if self.request.method in ['POST', 'PUT', 'PATCH', 'DELETE']:
-#             self.permission_classes = [permissions.IsAdminUser]
-#         else:
-#             self.permission_classes = [permissions.AllowAny]
-#         return super().get_permissions()
-#
-#
-# class ArticleDetailView(generics.RetrieveAPIView):   #просмотр отдельной статьи
-#     queryset = Articles.objects.all()
-#     serializer_class = ArticleSerializer
-#
-#
-# # ~~~~~~~~~~~~~~~~~Комментарии~~~~~~~~~~~~~~~~~~~
-#
-#
-# class CommentCreateUpdateView(generics.CreateAPIView, generics.UpdateAPIView):  #создавать обновлять коммы
-#     queryset = Comments.objects.all()
-#     serializer_class = CommentSerializer
-#     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-#
-#
-# class CommentDestroyView(generics.DestroyAPIView):  #удалять коммент
-#     queryset = Comments.objects.all()
-#     serializer_class = CommentSerializer
-#     permission_classes = [permissions.IsAdminUser]
-#
-#
-# class CommentListView(generics.ListAPIView):   # просмотр списка комментариев
-#     queryset = Comments.objects.all()
-#     serializer_class = CommentSerializer
-#     permission_classes = [permissions.AllowAny]
-#
-# # ~~~~~~~~~~~~~~~~~~Избранное~~~~~~~~~~~~~~~~~~~~~~~~
-#
-#
-# class FavoriteArticleCreateDestroyView(generics.CreateAPIView, generics.DestroyAPIView):   # удалять или создавать
-#     queryset = FavoriteArticle.objects.all()
-#     serializer_class = FavoriteArticleSerializer
-#     permission_classes = [permissions.IsAuthenticated]
-#
-#
-# class FavoriteArticleListView(generics.ListAPIView):  # просмотр
-#     queryset = FavoriteArticle.objects.all()
-#     serializer_class = FavoriteArticleSerializer
-#     permission_classes = [permissions.IsAuthenticated]
-#
-#     def get_queryset(self):
-#         return FavoriteArticle.objects.filter(user=self.request.user)
+    @action(detail=True, methods=['post'])
+    def add_to_favorites(self, request, pk=None):
+        article = self.get_object()
+        if FavoriteArticle.objects.filter(user=request.user, article=article).exists():
+            return Response({"message": "Article already in favorites."}, status=status.HTTP_400_BAD_REQUEST)
+        serializer = self.get_serializer(data={"article": article.id})
+        serializer.is_valid(raise_exception=True)
+        serializer.save(user=request.user)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    # @action(detail=True, methods=['get'])
+    # def view_article(self,request,pk=None):
+    #     fav_article = self.get_object()
