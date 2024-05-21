@@ -1,16 +1,20 @@
 from rest_framework import serializers
 from .models import Articles, Comments, FavoriteArticle
-from backend.users.serializers import UserSerializer
 
 
 class ArticleSerializer(serializers.ModelSerializer):
     author = serializers.PrimaryKeyRelatedField(read_only=True)
+    comments=serializers.SerializerMethodField()
 
     class Meta:
         model = Articles
-        fields = ['id', 'title', 'content', 'create_at', 'author', 'comments']
-        depth = 1
+        fields = ['id', 'title', 'content', 'create_at', 'author','comments']
         ref_name ='ArticleSerializer'
+
+    def get_comments(self, obj):
+        comments = obj.comments.all()
+        serialized_comments = CommentSerializer(comments,many=True)
+        return serialized_comments.data
 
     def create(self, validated_data):
         return Articles.objects.create(**validated_data)
@@ -21,20 +25,43 @@ class ArticleSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
-
+class ArticleDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Articles
+        fields = ['id', 'title', 'content', 'create_at','author']
+class ArticleListSerializer(serializers.ModelSerializer):
+    "Специально чтоб без комментов отображался список"
+    class Meta:
+        model = Articles
+        fields = ['id', 'title', 'content']
 class CommentSerializer(serializers.ModelSerializer):
-    article = ArticleSerializer()
-    author = UserSerializer()
+    content = serializers.CharField()
+    author = serializers.ReadOnlyField(source='author.username')
+    article = serializers.PrimaryKeyRelatedField(read_only=True)
 
     class Meta:
         model = Comments
-        fields = ['id', 'content', 'created_at', 'article', 'author']
-        ref_name = 'CommentSerializer'
-    def create(self, validated_data):
-        return Comments.objects.create(**validated_data)
+        fields = ['content' , 'author' , 'article']
+
+    def create(self , validated_data):
+        # Получаем article_id из контекста
+        article_id = self.context.get('article_id')
+
+        # Извлекаем content и автора из валидированных данных
+        content = validated_data['content']
+        author = self.context['request'].user
+
+        # Создаем комментарий
+        comment = Comments.objects.create(
+            content=content ,
+            author=author ,
+            article_id=article_id  # Используем article_id
+        )
+
+        return comment
 
     def update(self, instance, validated_data):
-        instance.comment_text = validated_data.get('comment_text', instance.comment_text)
+        instance.content = validated_data.get('content', instance.content)
         instance.save()
         return instance
 
@@ -42,7 +69,8 @@ class CommentSerializer(serializers.ModelSerializer):
 class FavoriteArticleSerializer(serializers.ModelSerializer):
     class Meta:
         model = FavoriteArticle
-        fields = '__all__'
+        fields = ['id','user','article']
+        read_only_fields = ['user']
 
     def create(self, validated_data):
         return FavoriteArticle.objects.create(**validated_data)
@@ -52,3 +80,6 @@ class FavoriteArticleSerializer(serializers.ModelSerializer):
         instance.article = validated_data.get('article', instance.article)
         instance.save()
         return instance
+
+
+
