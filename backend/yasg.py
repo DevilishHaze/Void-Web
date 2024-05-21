@@ -7,7 +7,7 @@ schema_view =get_schema_view(
    openapi.Info(
       title="Void Horizons",
       default_version='v1',
-      description="Описание тоси боси  трали вали",
+      description="Void Horizons API ",
       license=openapi.License(name="BSD License"),
    ),
    public=True,
