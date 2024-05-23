@@ -138,3 +138,23 @@ class AddToFavoritesAPIView(APIView):
             return Response({"error": "Unable to add article to favorites."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
+class ViewFavoritesAPIView(generics.ListAPIView):
+    serializer_class = FavoriteArticleSerializer
+    permission_classes = [permissions.IsAdminOrOwnerPermission]
+
+    def get_queryset(self):
+        return FavoriteArticle.objects.filter(user=self.request.user)
+
+class RemoveFromFavoritesAPIView(generics.DestroyAPIView):
+        queryset = FavoriteArticle.objects.all()
+        serializer_class = FavoriteArticleSerializer
+        permission_classes = [permissions.IsAdminOrOwnerPermission]
+
+        def delete(self , request , *args , **kwargs):
+            user = request.user
+            favorite_article = self.get_object()
+            if favorite_article.user != user:
+                return Response({"error": "You can only remove articles from your own favorites."} ,
+                                status=status.HTTP_403_FORBIDDEN)
+            favorite_article.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
