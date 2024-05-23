@@ -4,11 +4,12 @@ from .models import Articles, Comments, FavoriteArticle
 
 class ArticleSerializer(serializers.ModelSerializer):
     author = serializers.PrimaryKeyRelatedField(read_only=True)
-    comments=serializers.SerializerMethodField()
+    comments = serializers.SerializerMethodField()
+    constellation = serializers.SerializerMethodField()
 
     class Meta:
         model = Articles
-        fields = ['id', 'title', 'content', 'create_at', 'author','comments']
+        fields = ['id', 'title', 'content', 'create_at', 'author','comments','constellation']
         ref_name ='ArticleSerializer'
 
     def get_comments(self, obj):
@@ -28,7 +29,7 @@ class ArticleSerializer(serializers.ModelSerializer):
 class ArticleDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Articles
-        fields = ['id', 'title', 'content', 'create_at','author']
+        fields = ['id', 'title', 'content', 'create_at','author','constellation']
 class ArticleListSerializer(serializers.ModelSerializer):
     "Специально чтоб без комментов отображался список"
     class Meta:
