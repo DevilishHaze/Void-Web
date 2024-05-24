@@ -5,11 +5,11 @@ from .models import Articles, Comments, FavoriteArticle
 class ArticleSerializer(serializers.ModelSerializer):
     author = serializers.PrimaryKeyRelatedField(read_only=True)
     comments = serializers.SerializerMethodField()
-    constellation = serializers.SerializerMethodField()
+    constellation_name = serializers.CharField(source='constellation.name_rus', read_only=True)
 
     class Meta:
         model = Articles
-        fields = ['id', 'title', 'content', 'create_at', 'author','comments','constellation']
+        fields = ['id','constellation_name', 'title', 'content', 'create_at', 'author','comments']
         ref_name ='ArticleSerializer'
 
     def get_comments(self, obj):
