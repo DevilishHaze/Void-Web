@@ -18,15 +18,21 @@ class VisibleConstellationsAPI(APIView):
 
     @swagger_auto_schema(request_body=CoordinateSerializer)
     def post(self , request):
-        print("Request data:", request.data)
+        print("Request data:" , request.data)
         serializer = CoordinateSerializer(data=request.data)
         if serializer.is_valid():
             longitude = serializer.validated_data['longitude']
             latitude = serializer.validated_data['latitude']
 
-            visible_constellations = get_visible_constellations(longitude, latitude)
-            constellation_serializer = ConstellationSerializer(visible_constellations, many=True,context={'request': request})
+            visible_constellations = get_visible_constellations(longitude , latitude)
+            constellation_serializer = ConstellationSerializer(visible_constellations , many=True ,
+                                                               context={'request': request})
             return Response(constellation_serializer.data , status=status.HTTP_200_OK)
         else:
-            print("Serializer errors:", serializer.errors)  # Debugging line to print serializer errors
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            print("Serializer errors:" , serializer.errors)  # Debugging line to print serializer errors
+            return Response(serializer.errors , status=status.HTTP_400_BAD_REQUEST)
+            #constellation_serializer = ConstellationSerializer(visible_constellations, many=True,context={'request': request})
+            #return Response(constellation_serializer.data , status=status.HTTP_200_OK)
+        #else:
+           # print("Serializer errors:", serializer.errors)
+           # return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
