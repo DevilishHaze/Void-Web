@@ -35,6 +35,7 @@ class ArticleUpdateAPIView(generics.UpdateAPIView):
     """"Редактирование статьи или получение одной статьи"""
     queryset = Articles.objects.all()
     serializer_class = ArticleDetailSerializer
+    lookup_field = 'pk'
     permission_classes = [permissions.IsAdminUser]
 
     def get(self , request , pk=None):
