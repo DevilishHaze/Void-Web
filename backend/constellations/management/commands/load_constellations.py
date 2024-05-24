@@ -21,6 +21,8 @@ class Command(BaseCommand):
                 const_name = get_constellation(coord)
                 constellations.add((const_name, ra, dec))
 
+        sorted_constellations = sorted(constellations , key=lambda x: x[0])
+
         for const_name, ra, dec in constellations:
             constellation, created = Constellation.objects.get_or_create(
                 name=const_name,
