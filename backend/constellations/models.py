@@ -6,6 +6,7 @@ class Constellation(models.Model):
     name_rus = models.CharField(max_length=100, verbose_name="Русское название", null=True)
     ra = models.FloatField(verbose_name="Долгота,прямое восхождение (ra)", blank=False)
     dec = models.FloatField(verbose_name="Широта,склонение (dec)", blank=False)
+    image_url = models.URLField(blank=True , null=True)
     class Meta:
         verbose_name = 'Созвездие'
         verbose_name_plural = 'Cозвездия'
