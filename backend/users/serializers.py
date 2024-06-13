@@ -5,10 +5,10 @@ from django.contrib.auth.models import User
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields =['id','username','password']
+        fields =['username','password']
         ref_name = 'UserSerializer'
 class UserWithoutPasswordSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'username']
+        fields = [ 'username']
         read_only_fields = fields

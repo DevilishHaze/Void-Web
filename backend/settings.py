@@ -71,6 +71,10 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
     ]
 }
+DJOSER = {
+    'LOGIN_FIELD': 'username',
+    'USER_CREATE_PASSWORD_RETYPE': True,
+}
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:3000',
     'http://example.com',

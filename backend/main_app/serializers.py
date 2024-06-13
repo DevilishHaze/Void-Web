@@ -3,12 +3,12 @@ from .models import Articles, Comments, FavoriteArticle
 
 
 class ArticleSerializer(serializers.ModelSerializer):
-    author = serializers.PrimaryKeyRelatedField(read_only=True)
-    comments=serializers.SerializerMethodField()
+    comments = serializers.SerializerMethodField()
+    constellation_name = serializers.CharField(source='constellation.name_rus', read_only=True)
 
     class Meta:
         model = Articles
-        fields = ['id', 'title', 'content', 'create_at', 'author','comments']
+        fields = ['constellation_name', 'title', 'content','comments']
         ref_name ='ArticleSerializer'
 
     def get_comments(self, obj):
@@ -28,7 +28,7 @@ class ArticleSerializer(serializers.ModelSerializer):
 class ArticleDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Articles
-        fields = ['id', 'title', 'content', 'create_at','author']
+        fields = ['title', 'content','constellation']
 class ArticleListSerializer(serializers.ModelSerializer):
     "Специально чтоб без комментов отображался список"
     class Meta:
@@ -69,7 +69,7 @@ class CommentSerializer(serializers.ModelSerializer):
 class FavoriteArticleSerializer(serializers.ModelSerializer):
     class Meta:
         model = FavoriteArticle
-        fields = ['id','user','article']
+        fields = ['user','article']
         read_only_fields = ['user']
 
     def create(self, validated_data):
