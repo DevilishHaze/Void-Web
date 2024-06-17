@@ -110,7 +110,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'Void',
         'USER':'Void_admin',
-        'PASSWORD': 'Mother2Russia3',
+        'PASSWORD': 'Mother2Russia3Diploma+',
+        'HOST': '80.78.242.79',
         'PORT': '3306',
     }
 }
