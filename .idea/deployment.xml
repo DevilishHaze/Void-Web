@@ -1,11 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" remoteFilesAllowedToDisappearOnAutoupload="false">
+  <component name="PublishConfigData" serverName="root@80.78.242.79:22 password" remoteFilesAllowedToDisappearOnAutoupload="false">
     <serverData>
-      <paths name="sshuser@10.60.1.73:2206 password">
+      <paths name="root@80.78.242.79:22">
         <serverdata>
           <mappings>
-            <mapping local="$PROJECT_DIR$" web="/" />
+            <mapping deploy="/" local="$PROJECT_DIR$" web="/" />
+            <mapping local="" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="root@80.78.242.79:22 password">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/Void_start" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="root@80.78.242.79:22 password (2)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/Void_start" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="root@80.78.242.79:22 password (3)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/Void_start" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="root@80.78.242.79:22 password (4)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/Void_start" local="$PROJECT_DIR$" />
           </mappings>
         </serverdata>
       </paths>
