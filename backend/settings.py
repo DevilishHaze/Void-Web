@@ -76,8 +76,10 @@ DJOSER = {
     'USER_CREATE_PASSWORD_RETYPE': True,
 }
 CORS_ALLOWED_ORIGINS = [
-    'http://localhost:3000',
-    'http://example.com',
+    'https://80.78.242.79',
+    'http://80.78.242.79',
+
+
 ]
 
 ROOT_URLCONF = 'backend.urls'
@@ -110,8 +112,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'Void',
         'USER':'Void_admin',
-        'PASSWORD': 'Mother2Russia3Diploma+',
-        'HOST': '80.78.242.79',
+        'PASSWORD': 'Mother2Russia3+',
+        'HOST': 'localhost',
         'PORT': '3306',
     }
 }

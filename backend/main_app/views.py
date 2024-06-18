@@ -1,4 +1,6 @@
 from sqlite3 import IntegrityError
+
+from rest_framework.permissions import BasePermission
 from rest_framework.views import APIView
 from rest_framework import generics, permissions, status
 from rest_framework.decorators import action
@@ -6,7 +8,7 @@ from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.exceptions import PermissionDenied
 from .models import Articles, Comments, FavoriteArticle
-
+from .custom_permissions import IsAdminOrOwnerPermission
 from .serializers import ArticleSerializer , CommentSerializer , FavoriteArticleSerializer , ArticleListSerializer , \
     ArticleDetailSerializer
 
@@ -100,7 +102,7 @@ class CommentAPIView(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 class FavoriteArticleAPIView(APIView):
-        permission_classes = [permissions.IsAdminOrOwnerPermission]
+        permission_classes = [IsAdminOrOwnerPermission]
 
         def post(self , request):
             data = request.data.copy()
@@ -141,7 +143,7 @@ class AddToFavoritesAPIView(APIView):
 
 class ViewFavoritesAPIView(generics.ListAPIView):
     serializer_class = FavoriteArticleSerializer
-    permission_classes = [permissions.IsAdminOrOwnerPermission]
+    permission_classes = [IsAdminOrOwnerPermission]
 
     def get_queryset(self):
         return FavoriteArticle.objects.filter(user=self.request.user)
@@ -149,7 +151,7 @@ class ViewFavoritesAPIView(generics.ListAPIView):
 class RemoveFromFavoritesAPIView(generics.DestroyAPIView):
         queryset = FavoriteArticle.objects.all()
         serializer_class = FavoriteArticleSerializer
-        permission_classes = [permissions.IsAdminOrOwnerPermission]
+        permission_classes = [IsAdminOrOwnerPermission]
 
         def delete(self , request , *args , **kwargs):
             user = request.user
