@@ -111,7 +111,7 @@ DATABASES = {
         'NAME': 'Void',
         'USER':'Void_admin',
         'PASSWORD': 'Mother2Russia3Diploma+',
-        'HOST': '80.78.242.79',
+        'HOST': 'localhost',
         'PORT': '3306',
     }
 }
